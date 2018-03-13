@@ -5,24 +5,23 @@ import java.util.Set; //A collection that contains no duplicate elements
 
 @Entity
 public class User {
+
 	@Id
 	@GeneratedValue
 	private long id;
 	@Column(unique = true)
 	private String email;
 	private String name;
-	
+	private String role;
+
 	private String password;
-	@Transient // propiedad que no se almacena e la tabla. 
+	@Transient // Specifies that the property or field is not persistent.
 	private String passwordConfirm;
 
-	public User(String dni, String name) {
+	public User(String email, String name) {
 		super();
-		this.email = dni;
+		this.email = email;
 		this.name = name;
-	}
-	
-	public User() {
 	}
 
 	public String getPassword() {
@@ -41,6 +40,9 @@ public class User {
 		this.passwordConfirm = passwordConfirm;
 	}
 
+	public User() {
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -53,8 +55,8 @@ public class User {
 		return email;
 	}
 
-	public void setEmail(String dni) {
-		this.email = dni;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getName() {
@@ -65,7 +67,11 @@ public class User {
 		this.name = name;
 	}
 
-	public String getFullName() {
-		return this.name;
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 }
