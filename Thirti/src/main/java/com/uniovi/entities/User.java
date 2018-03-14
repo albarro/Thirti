@@ -17,6 +17,9 @@ public class User {
 	private String password;
 	@Transient // Specifies that the property or field is not persistent.
 	private String passwordConfirm;
+	
+	@OneToMany(mappedBy = "friendRequests", cascade = CascadeType.ALL)
+	private Set<User> friendRequests;
 
 	public User(String email, String name) {
 		super();
@@ -73,5 +76,9 @@ public class User {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+	
+	public void addFriend(User user) {
+		friendRequests.add(user);
 	}
 }

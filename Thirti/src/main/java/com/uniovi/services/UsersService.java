@@ -3,8 +3,12 @@ package com.uniovi.services;
 import java.util.*;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import com.uniovi.entities.User;
 import com.uniovi.repository.UsersRepository;
 
@@ -20,9 +24,8 @@ public class UsersService {
 	public void init() {
 	}
 
-	public List<User> getUsers() {
-		List<User> users = new ArrayList<User>();
-		usersRepository.findAll().forEach(users::add);
+	public Page<User> getUsers(Pageable pageable) {
+		Page<User> users =	usersRepository.findAll(pageable);
 		return users;
 	}
 
@@ -42,5 +45,14 @@ public class UsersService {
 
 	public void deleteUser(Long id) {
 		usersRepository.delete(id);
+	}
+
+	public Page<User> searchUserByEmailAndName(Pageable pageable, String searchText) {
+		Page<User> users = new PageImpl<User>(new LinkedList<User>());
+		searchText = "%"+searchText+"%";
+		users = usersRepository.
+					searchByEmailAndName(pageable, searchText);
+
+		return users;
 	}
 }

@@ -1,6 +1,12 @@
 package com.uniovi.controllers;
 
+import java.security.Principal;
+import java.util.LinkedList;
+
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -32,22 +38,44 @@ public class UsersController {
 	
 	
 	@RequestMapping("/user/list" )
-	public String getListado(Model model){
-		model.addAttribute("usersList", usersService.getUsers());
+	public String getListado(Model model, Pageable pageable,
+			@RequestParam(value = "", required=false) String searchtext){
+		Page<User> users = new PageImpl<User>(new LinkedList<User>());
+		if (searchtext != null && !searchtext.isEmpty()) {
+			users =  usersService
+				.searchUserByEmailAndName(pageable, searchtext);
+			
+		} else {
+		users = usersService.getUsers(pageable);
+		}
+		model.addAttribute("usersList", users.getContent());
+		model.addAttribute("page", users);
 		return "user/list";
 	}
 
-	@RequestMapping(value="/user/add")
-	public String getUser(Model model){
-		model.addAttribute("rolesList", rolesService.getRoles());
-		return "user/add";
+//	@RequestMapping(value="/user/add")
+//	public String getUser(Model model){
+//		model.addAttribute("rolesList", rolesService.getRoles());
+//		return "user/add";
+//	}
+	
+	@RequestMapping(value="/user/add/{id}")
+	public String getUser(Model model, Pageable pageable, Principal principal, @PathVariable  Long id){
+		String email = principal.getName(); // Email es el name de la autenticación
+		User user = usersService.getUserByEmail(email);
+		user.addFriend(usersService.getUser(id));
+		Page<User> users = new PageImpl<User>(new LinkedList<User>());
+		model.addAttribute("usersList", users.getContent());
+		model.addAttribute("page", users);
+		return "user/list";
 	}
 	
-	@RequestMapping(value="/user/add", method=RequestMethod.POST )	
-	public String setUser(@ModelAttribute User user){
-		usersService.addUser(user);
-		return "redirect:/user/list";
-	}
+	
+//	@RequestMapping(value="/user/add", method=RequestMethod.POST )	
+//	public String setUser(@ModelAttribute User user){
+//		usersService.addUser(user);
+//		return "redirect:/user/list";
+//	}
 	
 	@RequestMapping("/user/details/{id}" )
 	public String getDetail(Model model, @PathVariable Long id){
