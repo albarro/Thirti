@@ -32,7 +32,7 @@
 					<tr th:each="user : ${usersList}">
 						<td th:text="${user.email}">email@email.com</td>
 						<td th:text="${user.name}">Nombre del alumno</td>
-						<td><a th:href="${'/request/add/' + user.id}">Agregar amigo</a></td>
+						<td><a th:href="${'/user/add/' + user.id}">Agregar amigo</a></td>
 					</tr>
 				</tbody>
 			</table>

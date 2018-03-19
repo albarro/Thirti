@@ -5,16 +5,8 @@
 	<!-- Barra de Navegación superior -->
 	<nav th:replace="fragments/nav" />
 	<div class="container">
-		<h2>Usuarios</h2>
-		<form class="navbar-form" th:action="${'/user/list'}">
-			<div class="form-group">
-				<input th:name="searchtext" type="text"
-					class="form-control" placeholder="Buscar por nombre o email">
-			</div>
-			<button type="submit" class="btn btn-default">Buscar</button>
-		</form>
-		<p>Los usuarios que actualmente figuran en el sistema son los
-			siguientes:</p>
+		<h2>Solicitudes de amistad</h2>
+		<p>Solicitudes de amistad pendientes:</p>
 		<div class="table-responsive">
 			<table class="table table-hover">
 				<thead>
@@ -29,10 +21,10 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="user : ${usersList}">
-						<td th:text="${user.email}">email@email.com</td>
-						<td th:text="${user.name}">Nombre del alumno</td>
-						<td><a th:href="${'/request/add/' + user.id}">Agregar amigo</a></td>
+					<tr th:each="request : ${requestList}">
+						<td th:text="${request.sendUserEmail}">email@email.com</td>
+						<td th:text="${request.sendUserName}">Nombre del alumno</td>
+						<td><a th:href="${'/request/listRequest'}">Aceptar solicitud</a></td>
 					</tr>
 				</tbody>
 			</table>

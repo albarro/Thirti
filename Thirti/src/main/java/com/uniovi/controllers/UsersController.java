@@ -1,20 +1,22 @@
 package com.uniovi.controllers;
 
-import java.security.Principal;
 import java.util.LinkedList;
 
-import org.springframework.beans.factory.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import com.uniovi.entities.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.uniovi.entities.User;
 import com.uniovi.services.RolesService;
 import com.uniovi.services.SecurityService;
 import com.uniovi.services.UsersService;
@@ -28,6 +30,7 @@ public class UsersController {
 
 	@Autowired 
 	private UsersService usersService;
+	
 	
 	@Autowired
 	private SecurityService securityService;
@@ -53,29 +56,18 @@ public class UsersController {
 		return "user/list";
 	}
 
-//	@RequestMapping(value="/user/add")
-//	public String getUser(Model model){
-//		model.addAttribute("rolesList", rolesService.getRoles());
-//		return "user/add";
-//	}
-	
-	@RequestMapping(value="/user/add/{id}")
-	public String getUser(Model model, Pageable pageable, Principal principal, @PathVariable  Long id){
-		String email = principal.getName(); // Email es el name de la autenticación
-		User user = usersService.getUserByEmail(email);
-		user.addFriend(usersService.getUser(id));
-		Page<User> users = new PageImpl<User>(new LinkedList<User>());
-		model.addAttribute("usersList", users.getContent());
-		model.addAttribute("page", users);
-		return "user/list";
+	@RequestMapping(value="/user/add")
+	public String getUser(Model model){
+		model.addAttribute("rolesList", rolesService.getRoles());
+		return "user/add";
 	}
 	
 	
-//	@RequestMapping(value="/user/add", method=RequestMethod.POST )	
-//	public String setUser(@ModelAttribute User user){
-//		usersService.addUser(user);
-//		return "redirect:/user/list";
-//	}
+	@RequestMapping(value="/user/add", method=RequestMethod.POST )	
+	public String setUser(@ModelAttribute User user){
+		usersService.addUser(user);
+		return "redirect:/user/list";
+	}
 	
 	@RequestMapping("/user/details/{id}" )
 	public String getDetail(Model model, @PathVariable Long id){
