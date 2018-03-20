@@ -1,5 +1,6 @@
 package com.uniovi.services;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,13 @@ public class FriendRequestService {
 		return marks;
 	}
 
-	public Page<FriendRequest> getFriendRequest(Pageable pageable) {
+	public Page<FriendRequest> getFriendRequests(Pageable pageable) {
 		Page<FriendRequest> marks = friendRequestRepository.findAll(pageable);
 		return marks;
+	}
+	
+	public FriendRequest getFriendRequest(Long id) {
+		return friendRequestRepository.findOne(id);
 	}
 
 	public void setRequestAccepted(Long id) {

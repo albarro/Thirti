@@ -12,7 +12,7 @@ import com.uniovi.entities.User;
 
 public interface FriendRequestRepository extends CrudRepository<FriendRequest, Long> {
 
-	@Query("SELECT r FROM FriendRequest r WHERE r.userRecived = ?1 ORDER BY r.id ASC ")
+	@Query("SELECT r FROM FriendRequest r WHERE r.userRecived = ?1 AND r.accepted = 0 ORDER BY r.id ASC ")
 	Page<FriendRequest> findAllByUser(Pageable pageable, User user);
 	
 	Page<FriendRequest> findAll(Pageable pageable); 

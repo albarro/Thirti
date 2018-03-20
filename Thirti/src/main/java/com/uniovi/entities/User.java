@@ -8,6 +8,8 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
@@ -29,6 +31,12 @@ public class User {
 	@OneToMany(mappedBy = "userRecived", cascade = CascadeType.ALL)
 	private Set<FriendRequest> friendsRequest;
 
+	@ManyToOne
+	@JoinColumn(name = "friend_id")
+	private User friendOf;
+	
+	@OneToMany(mappedBy = "friendOf", cascade = CascadeType.ALL)
+	private Set<User> friends;
 
 	public User(String email, String name) {
 		super();
@@ -94,6 +102,10 @@ public class User {
 
 	public Set<FriendRequest>  getFriendRequest() {
 		return friendsRequest;
+	}
+	
+	public void addFriend(User friend) {
+		friends.add(friend);
 	}
 	
 }

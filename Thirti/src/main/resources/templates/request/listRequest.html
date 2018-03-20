@@ -24,7 +24,7 @@
 					<tr th:each="request : ${requestList}">
 						<td th:text="${request.sendUserEmail}">email@email.com</td>
 						<td th:text="${request.sendUserName}">Nombre del alumno</td>
-						<td><a th:href="${'/request/listRequest'}">Aceptar solicitud</a></td>
+						<td><a th:href="${'/request/accept/' + request.id}">Aceptar solicitud</a></td>
 					</tr>
 				</tbody>
 			</table>

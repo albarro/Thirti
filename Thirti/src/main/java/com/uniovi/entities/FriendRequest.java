@@ -14,6 +14,7 @@ public class FriendRequest {
 		private Long id;
 		private String sendUserName;
 		private String sendUserEmail;
+		private Long sendId;
 		private Boolean accepted = false; 
 		
 		@ManyToOne
@@ -50,6 +51,7 @@ public class FriendRequest {
 			super();
 			this.sendUserEmail = sendUser.getEmail();
 			this.sendUserName = sendUser.getName();
+			this.setSendId(sendUser.getId());
 			this.userRecived = userRecived;
 		}
 	
@@ -66,11 +68,17 @@ public class FriendRequest {
 			this.userRecived = user;
 		}
 		
-		public Boolean getResend() {
+		public Boolean getAccepted() {
 			return accepted;
 		}
 		public void setAccepted(Boolean accepted) {
 			this.accepted = accepted;
+		}
+		public Long getSendId() {
+			return sendId;
+		}
+		public void setSendId(Long sendId) {
+			this.sendId = sendId;
 		}
 
 }

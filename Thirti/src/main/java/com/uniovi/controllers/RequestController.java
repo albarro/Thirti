@@ -27,7 +27,7 @@ public class RequestController {
 	@Autowired 
 	private FriendRequestService friendRequestService;
 	
-	@RequestMapping("/request/listRequest" )
+	@RequestMapping("/request/list" )
 	public String getListadoRequest(Model model, Pageable pageable, Principal principal,
 			@RequestParam(value = "", required=false) String searchtext){
 		String email = principal.getName(); // Email es el name de la autenticación
@@ -40,14 +40,30 @@ public class RequestController {
 	}
 	
 	@RequestMapping(value="/request/add/{id}")
-	public String addFriend(Model model, Pageable pageable, Principal principal, @PathVariable  Long id){
+	public String addFriendRequest(Model model, Pageable pageable, Principal principal, @PathVariable  Long id){
 		String email = principal.getName(); // Email es el name de la autenticación
 		User activeUser = usersService.getUserByEmail(email);
 		User reciverUser = usersService.getUser(id);
 		friendRequestService.addFriendRequest(new FriendRequest(activeUser, reciverUser));
-		Page<User> users = new PageImpl<User>(new LinkedList<User>());
 		model.addAttribute("user", reciverUser);
 		return "request/add";
+	}
+	
+	@RequestMapping(value="/request/accept/{id}")
+	public String addFriend(Model model, Pageable pageable, Principal principal, @PathVariable  Long id){
+		String email = principal.getName(); // Email es el name de la autenticación
+		User activeUser = usersService.getUserByEmail(email);
+		FriendRequest fr = friendRequestService.getFriendRequest(id);
+		User reciverUser = usersService.getUser(fr.getSendId());
+		friendRequestService.setRequestAccepted(id);
+		
+		usersService.addFriend(reciverUser, activeUser);
+		
+		Page<FriendRequest> request = new PageImpl<FriendRequest>(new LinkedList<FriendRequest>());
+		request = friendRequestService.getRequestsForUser(pageable, activeUser);
+		model.addAttribute("requestList", request.getContent());
+		model.addAttribute("page", request);
+		return "request/listRequest";
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.uniovi.controllers;
 
+import java.security.Principal;
 import java.util.LinkedList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,17 @@ public class UsersController {
 		model.addAttribute("usersList", users.getContent());
 		model.addAttribute("page", users);
 		return "user/list";
+	}
+	
+	@RequestMapping("/user/friends" )
+	public String getFriends(Model model, Pageable pageable, Principal principal){
+		String email = principal.getName(); // Email es el name de la autenticación
+		User user = usersService.getUserByEmail(email);
+		Page<User> users = new PageImpl<User>(new LinkedList<User>());
+		users = usersService.getFriendsByUser(pageable, user);
+		model.addAttribute("usersList", users.getContent());
+		model.addAttribute("page", users);
+		return "user/friends";
 	}
 
 	@RequestMapping(value="/user/add")
