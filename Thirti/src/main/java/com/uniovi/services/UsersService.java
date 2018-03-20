@@ -55,16 +55,6 @@ public class UsersService {
 
 		return users;
 	}
-	
-	public void addFriend(User friend, User of) {
-		friend.addFriend(of);
-		of.addFriend(friend);
-	}
-	
-	public Page<User> getFriendsByUser(Pageable pageable, User user) {
-		Page<User> users = new PageImpl<User>(new LinkedList<User>());
-		users = usersRepository.findAllFriendsByUser(pageable, user);
-		return users;
-	}
+
 	
 }

@@ -5,6 +5,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uniovi.entities.Friend;
 import com.uniovi.entities.User;
 
 @Service
@@ -15,6 +16,9 @@ public class InsertSampleDataService {
 	
 	@Autowired
 	private RolesService rolesService;
+	
+	@Autowired
+	private FriendService friendService;
 
 	@PostConstruct
 	public void init() {
@@ -43,5 +47,11 @@ public class InsertSampleDataService {
 		usersService.addUser(user4);
 		usersService.addUser(user5);
 		usersService.addUser(user6);
+		
+		friendService.addFriendRelationship(user1, user2);
+		friendService.addFriendRelationship(user1, user4);
+		
+		friendService.addFriendRelationship(user5, user6);
+		friendService.addFriendRelationship(user5, user4);
 	}
 }

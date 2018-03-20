@@ -1,6 +1,5 @@
 package com.uniovi.services;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.springframework.beans.factory.annotation.Autowired;

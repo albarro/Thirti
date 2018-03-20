@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.uniovi.entities.Friend;
 import com.uniovi.entities.FriendRequest;
 import com.uniovi.entities.User;
 import com.uniovi.services.FriendRequestService;
+import com.uniovi.services.FriendService;
 import com.uniovi.services.UsersService;
 
 @Controller
@@ -26,6 +28,9 @@ public class RequestController {
 	
 	@Autowired 
 	private FriendRequestService friendRequestService;
+	
+	@Autowired
+	private FriendService friendService;
 	
 	@RequestMapping("/request/list" )
 	public String getListadoRequest(Model model, Pageable pageable, Principal principal,
@@ -57,7 +62,7 @@ public class RequestController {
 		User reciverUser = usersService.getUser(fr.getSendId());
 		friendRequestService.setRequestAccepted(id);
 		
-		usersService.addFriend(reciverUser, activeUser);
+		friendService.addFriendRelationship(activeUser, reciverUser);
 		
 		Page<FriendRequest> request = new PageImpl<FriendRequest>(new LinkedList<FriendRequest>());
 		request = friendRequestService.getRequestsForUser(pageable, activeUser);

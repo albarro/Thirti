@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.uniovi.entities.Friend;
 import com.uniovi.entities.User;
+import com.uniovi.services.FriendRequestService;
+import com.uniovi.services.FriendService;
 import com.uniovi.services.RolesService;
 import com.uniovi.services.SecurityService;
 import com.uniovi.services.UsersService;
@@ -32,6 +35,8 @@ public class UsersController {
 	@Autowired 
 	private UsersService usersService;
 	
+	@Autowired
+	private FriendService friendService;
 	
 	@Autowired
 	private SecurityService securityService;
@@ -61,10 +66,11 @@ public class UsersController {
 	public String getFriends(Model model, Pageable pageable, Principal principal){
 		String email = principal.getName(); // Email es el name de la autenticación
 		User user = usersService.getUserByEmail(email);
-		Page<User> users = new PageImpl<User>(new LinkedList<User>());
-		users = usersService.getFriendsByUser(pageable, user);
-		model.addAttribute("usersList", users.getContent());
-		model.addAttribute("page", users);
+		
+		Page<Friend> friends = new PageImpl<Friend>(new LinkedList<Friend>());
+		friends = friendService.getFriendsForUser(pageable, user);
+		model.addAttribute("friendsList", friends.getContent());
+		model.addAttribute("page", friends);
 		return "user/friends";
 	}
 

@@ -1,5 +1,6 @@
 package com.uniovi.entities;
 
+import java.util.HashSet;
 import java.util.Set; //A collection that contains no duplicate elements
 
 import javax.persistence.CascadeType;
@@ -9,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
@@ -31,12 +33,8 @@ public class User {
 	@OneToMany(mappedBy = "userRecived", cascade = CascadeType.ALL)
 	private Set<FriendRequest> friendsRequest;
 
-	@ManyToOne
-	@JoinColumn(name = "friend_id")
-	private User friendOf;
-	
-	@OneToMany(mappedBy = "friendOf", cascade = CascadeType.ALL)
-	private Set<User> friends;
+	 @OneToMany(mappedBy = "friendOf", cascade = CascadeType.ALL)
+	private Set<Friend> friends;
 
 	public User(String email, String name) {
 		super();
@@ -104,8 +102,12 @@ public class User {
 		return friendsRequest;
 	}
 	
-	public void addFriend(User friend) {
-		friends.add(friend);
+	public Set<Friend> getFriends() {
+		return friends;
+	}
+
+	public void setFriends(Set<Friend> friends) {
+		this.friends = friends;
 	}
 	
 }
